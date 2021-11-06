@@ -1,13 +1,11 @@
 package com.hkay.zohouserdetails.model
 
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Coordinates(
-    @SerialName("latitude")
+    @SerializedName("latitude")
     val latitude: String?,
-    @SerialName("longitude")
+    @SerializedName("longitude")
     val longitude: String?
 )

@@ -1,15 +1,13 @@
 package com.hkay.zohouserdetails.model
 
+import com.google.gson.annotations.SerializedName
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Picture(
-    @SerialName("large")
+    @SerializedName("large")
     val large: String?,
-    @SerialName("medium")
+    @SerializedName("medium")
     val medium: String?,
-    @SerialName("thumbnail")
+    @SerializedName("thumbnail")
     val thumbnail: String?
 )

@@ -1,17 +1,15 @@
 package com.hkay.zohouserdetails.model
 
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Info(
-    @SerialName("page")
+    @SerializedName("page")
     val page: Int?,
-    @SerialName("results")
+    @SerializedName("results")
     val results: Int?,
-    @SerialName("seed")
+    @SerializedName("seed")
     val seed: String?,
-    @SerialName("version")
+    @SerializedName("version")
     val version: String?
 )

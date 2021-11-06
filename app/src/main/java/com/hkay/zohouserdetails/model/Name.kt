@@ -1,15 +1,13 @@
 package com.hkay.zohouserdetails.model
 
+import com.google.gson.annotations.SerializedName
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Name(
-    @SerialName("first")
+    @SerializedName("first")
     val first: String?,
-    @SerialName("last")
+    @SerializedName("last")
     val last: String?,
-    @SerialName("title")
+    @SerializedName("title")
     val title: String?
 )

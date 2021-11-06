@@ -1,13 +1,11 @@
 package com.hkay.zohouserdetails.model
 
+import com.google.gson.annotations.SerializedName
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Registered(
-    @SerialName("age")
+    @SerializedName("age")
     val age: Int?,
-    @SerialName("date")
+    @SerializedName("date")
     val date: String?
 )

@@ -1,23 +1,21 @@
 package com.hkay.zohouserdetails.model
 
+import com.google.gson.annotations.SerializedName
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Location(
-    @SerialName("city")
+    @SerializedName("city")
     val city: String?,
-    @SerialName("coordinates")
+    @SerializedName("coordinates")
     val coordinates: Coordinates?,
-    @SerialName("country")
+    @SerializedName("country")
     val country: String?,
-    @SerialName("postcode")
+    @SerializedName("postcode")
     val postcode: String?,
-    @SerialName("state")
+    @SerializedName("state")
     val state: String?,
-    @SerialName("street")
+    @SerializedName("street")
     val street: Street?,
-    @SerialName("timezone")
+    @SerializedName("timezone")
     val timezone: Timezone?
 )

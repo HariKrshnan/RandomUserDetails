@@ -1,13 +1,11 @@
 package com.hkay.zohouserdetails.model
 
+import com.google.gson.annotations.SerializedName
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ResponseModel(
-    @SerialName("info")
+    @SerializedName("info")
     val info: Info?,
-    @SerialName("results")
+    @SerializedName("results")
     val results: List<Result>?
 )

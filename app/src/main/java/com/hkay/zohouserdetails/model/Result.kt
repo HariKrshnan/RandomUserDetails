@@ -1,33 +1,31 @@
 package com.hkay.zohouserdetails.model
 
+import com.google.gson.annotations.SerializedName
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Result(
-    @SerialName("cell")
+    @SerializedName("cell")
     val cell: String?,
-    @SerialName("dob")
+    @SerializedName("dob")
     val dob: Dob?,
-    @SerialName("email")
+    @SerializedName("email")
     val email: String?,
-    @SerialName("gender")
+    @SerializedName("gender")
     val gender: String?,
-    @SerialName("id")
+    @SerializedName("id")
     val id: Id?,
-    @SerialName("location")
+    @SerializedName("location")
     val location: Location?,
-    @SerialName("login")
+    @SerializedName("login")
     val login: Login?,
-    @SerialName("name")
+    @SerializedName("name")
     val name: Name?,
-    @SerialName("nat")
+    @SerializedName("nat")
     val nat: String?,
-    @SerialName("phone")
+    @SerializedName("phone")
     val phone: String?,
-    @SerialName("picture")
+    @SerializedName("picture")
     val picture: Picture?,
-    @SerialName("registered")
+    @SerializedName("registered")
     val registered: Registered?
 )
