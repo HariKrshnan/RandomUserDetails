@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +43,11 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
+        init()
+        textChangeListener()
+    }
+
+    private fun init() {
         val dbHelper = context?.let { UserDatabase.DatabaseBuilder.getInstance(it) }?.let {
             DatabaseHelperImpl(
                 it
@@ -51,8 +57,9 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             viewModel.fetchDataFromDb(dbHelper)
         }
         viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
-            if(it.results != null) {
-                setUpRecyclerView(it.results)
+            if (it.results != null) {
+                list = it.results
+                setUpRecyclerView()
             } else Toast.makeText(activity, "Something went wrong", Toast.LENGTH_SHORT).show()
         })
         if (dbHelper != null) {
@@ -60,7 +67,16 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         }
     }
 
-    private fun setUpRecyclerView(list: List<Result>) {
+    private fun textChangeListener() {
+        binding.textField.editText?.doAfterTextChanged {text->
+            val searchList = list?.filter { it.name?.first?.contains(text.toString()) == true or (it.name?.last?.contains(text.toString()) == true) }
+            if (searchList != null) {
+                updateRecyclerView(searchList)
+            }
+        }
+    }
+
+    private fun setUpRecyclerView() {
         userListBinding?.userList?.setHasFixedSize(true)
         _sGridLayoutManager = StaggeredGridLayoutManager(
             2,
@@ -76,11 +92,10 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         }
         userListBinding?.userList?.adapter = adapter
         Log.i("Test", "SetUpRecyclerView")
-        updateRecyclerView(list)
+        list?.let { updateRecyclerView(it) }
     }
 
     private fun updateRecyclerView(list: List<Result>) {
-        list[0].gender?.let { Log.i("Test", it) }
         adapter?.submitList(list)
     }
 
