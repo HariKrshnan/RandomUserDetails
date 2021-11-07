@@ -3,7 +3,6 @@ package com.hkay.zohouserdetails.core
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.core.content.ContextCompat.getSystemService
 
 class NetworkUtils {
     fun isInternetAvailable(context: Context): Boolean {

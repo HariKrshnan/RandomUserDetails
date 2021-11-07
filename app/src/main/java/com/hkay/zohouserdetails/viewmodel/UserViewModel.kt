@@ -10,12 +10,13 @@ import com.hkay.zohouserdetails.model.ResponseModel
 import kotlinx.coroutines.*
 
 class UserViewModel: ViewModel() {
-    val userDetailsResponse = MutableLiveData<ResponseModel>()
-    val userDetailsFromDb = MutableLiveData<List<User>>()
+    val userDetailsResponse: MutableLiveData<ResponseModel> by lazy { MutableLiveData<ResponseModel>() }
+    val userDetailsFromDb: MutableLiveData<List<User>> by lazy { MutableLiveData<List<User>>() }
+    private val apiHelper: ApiHelper by lazy { ApiHelper() }
+    var userResponse: ResponseModel? = null
     fun getUserDetails(dbHelper: DatabaseHelperImpl){
-        var userResponse: ResponseModel?
         viewModelScope.launch {
-            userResponse = ApiHelper().getUserDetails()
+            userResponse = apiHelper.getUserDetails()
             val users = mutableListOf<User>()
             val len = userResponse?.results?.size
             if (len != null)

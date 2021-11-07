@@ -5,8 +5,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("api")
+    @GET("api/")
     suspend fun getUsersInfo(
-        @Query("result")result: Int = 25
+        @Query("results")results: Int = 25
     ): ResponseModel
 }
