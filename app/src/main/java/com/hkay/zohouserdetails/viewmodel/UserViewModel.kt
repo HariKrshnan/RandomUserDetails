@@ -9,30 +9,40 @@ import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.model.ResponseModel
 import kotlinx.coroutines.*
 
-class UserViewModel: ViewModel() {
+class UserViewModel : ViewModel() {
     val userDetailsResponse: MutableLiveData<ResponseModel> by lazy { MutableLiveData<ResponseModel>() }
     val userDetailsFromDb: MutableLiveData<List<User>> by lazy { MutableLiveData<List<User>>() }
     private val apiHelper: ApiHelper by lazy { ApiHelper() }
     var userResponse: ResponseModel? = null
-    fun getUserDetails(dbHelper: DatabaseHelperImpl){
+    fun getUserDetails(dbHelper: DatabaseHelperImpl) {
         viewModelScope.launch {
             userResponse = apiHelper.getUserDetails()
-            val users = mutableListOf<User>()
+            val usersList = mutableListOf<User>()
             val len = userResponse?.results?.size
             if (len != null)
-             for (i in 0 until len) {
-                 val user = userResponse?.results?.get(i)?.let { it.cell?.let { it1 -> User(it1, it.name?.first, it.name?.last) } }
-                 if (user != null) {
-                     users.add(user)
-                 }
-             }
-            dbHelper.insertAll(users)
+                for (i in 0 until len) {
+                    val user = userResponse?.results?.get(i)?.let { res ->
+                        res.cell?.let { id ->
+                            User(
+                                id,
+                                (res.name?.first + " " + res.name?.last),
+                                res.picture?.medium,
+                                res.location?.coordinates?.latitude,
+                                res.location?.coordinates?.latitude
+                            )
+                        }
+                    }
+                    if (user != null) {
+                        usersList.add(user)
+                    }
+                }
+            dbHelper.insertAll(usersList)
             userDetailsResponse.postValue(userResponse)
         }
     }
 
     fun fetchDataFromDb(dbHelper: DatabaseHelperImpl) {
-        viewModelScope.launch  {
+        viewModelScope.launch {
             userDetailsFromDb.postValue(dbHelper.getUsers())
         }
     }

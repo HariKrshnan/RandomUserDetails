@@ -10,16 +10,13 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hkay.zohouserdetails.R
 import com.hkay.zohouserdetails.database.DatabaseHelperImpl
+import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.database.UserDatabase
 import com.hkay.zohouserdetails.databinding.FragmentUserListBinding
-import com.hkay.zohouserdetails.model.Result
 import com.hkay.zohouserdetails.viewmodel.UserViewModel
-
 
 
 class UserListFragment : Fragment(R.layout.fragment_user_list) {
@@ -27,7 +24,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private val binding get() = userListBinding!!
     private var adapter: UserListAdapter? = null
     private var _sGridLayoutManager: StaggeredGridLayoutManager? = null
-    private var list: List<Result>? = null
+    private var list: List<User>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,11 +40,11 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
-        init()
+        fetchDataFromDb()
         textChangeListener()
     }
 
-    private fun init() {
+    private fun fetchDataFromDb() {
         val dbHelper = context?.let { UserDatabase.DatabaseBuilder.getInstance(it) }?.let {
             DatabaseHelperImpl(
                 it
@@ -56,20 +53,17 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         if (dbHelper != null) {
             viewModel.fetchDataFromDb(dbHelper)
         }
-        viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
-            if (it.results != null) {
-                list = it.results
+        viewModel.userDetailsFromDb.observe(viewLifecycleOwner, { user ->
+            if (user != null) {
+                list = user
                 setUpRecyclerView()
             } else Toast.makeText(activity, "Something went wrong", Toast.LENGTH_SHORT).show()
         })
-        if (dbHelper != null) {
-            viewModel.getUserDetails(dbHelper)
-        }
     }
 
     private fun textChangeListener() {
-        binding.textField.editText?.doAfterTextChanged {text->
-            val searchList = list?.filter { it.name?.first?.contains(text.toString()) == true or (it.name?.last?.contains(text.toString()) == true) }
+        binding.textField.editText?.doAfterTextChanged { text ->
+            val searchList = list?.filter { it.name?.contains(text.toString(), ignoreCase = true) == true }
             if (searchList != null) {
                 updateRecyclerView(searchList)
             }
@@ -84,9 +78,9 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         )
         userListBinding?.userList?.layoutManager = _sGridLayoutManager
         adapter = context?.let { it ->
-            UserListAdapter(it) { results ->
-                if (results != null) {
-                    Toast.makeText(activity, results.email, Toast.LENGTH_SHORT).show()
+            UserListAdapter(it) { user ->
+                if (user != null) {
+                    Toast.makeText(activity, user.name, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -95,7 +89,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         list?.let { updateRecyclerView(it) }
     }
 
-    private fun updateRecyclerView(list: List<Result>) {
+    private fun updateRecyclerView(list: List<User>) {
         adapter?.submitList(list)
     }
 

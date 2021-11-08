@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
+import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.databinding.UserListItemBinding
-import com.hkay.zohouserdetails.model.Result
 
-class UserListAdapter(context: Context, private val listener: ((Result?) -> Unit)? = null) :
-    androidx.recyclerview.widget.ListAdapter<Result, RecyclerView.ViewHolder>(UserDiffCallBack()) {
+class UserListAdapter(context: Context, private val listener: ((User?) -> Unit)? = null) :
+    androidx.recyclerview.widget.ListAdapter<User, RecyclerView.ViewHolder>(UserDiffCallBack()) {
 
     val localContext = context
 
@@ -34,21 +33,19 @@ class UserListAdapter(context: Context, private val listener: ((Result?) -> Unit
     inner class UserListViewHolder(private val binding: UserListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(item: Result) {
+        fun bind(item: User) {
             Glide.with(localContext)
-                .load(item.picture?.medium)
-                .override(binding.itemImageView.width, Target.SIZE_ORIGINAL)
+                .load(item.picture)
                 .into(binding.itemImageView)
-            binding.itemTextView.text = item.name?.first + " " + item.name?.last
-            Log.e("List", item.name?.first + " " + item.name?.last)
+            binding.itemTextView.text = item.name
             binding.root.setOnClickListener {
                 listener?.invoke(item)
             }
         }
     }
 
-    class UserDiffCallBack : DiffUtil.ItemCallback<Result>() {
-        override fun areItemsTheSame(oldItem: Result, newItem: Result) = oldItem == newItem
-        override fun areContentsTheSame(oldItem: Result, newItem: Result) = oldItem == newItem
+    class UserDiffCallBack : DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: User, newItem: User) = oldItem == newItem
     }
 }
