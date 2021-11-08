@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hkay.zohouserdetails.R
 import com.hkay.zohouserdetails.database.DatabaseHelperImpl
@@ -63,7 +65,8 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
     private fun textChangeListener() {
         binding.textField.editText?.doAfterTextChanged { text ->
-            val searchList = list?.filter { it.name?.contains(text.toString(), ignoreCase = true) == true }
+            val searchList =
+                list?.filter { it.name?.contains(text.toString(), ignoreCase = true) == true }
             if (searchList != null) {
                 updateRecyclerView(searchList)
             }
@@ -80,7 +83,13 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         adapter = context?.let { it ->
             UserListAdapter(it) { user ->
                 if (user != null) {
-                    Toast.makeText(activity, user.name, Toast.LENGTH_SHORT).show()
+                    val bundle = bundleOf(
+                        "pictureUrl" to user.picture,
+                        "userName" to user.name,
+                        "latitude" to user.latitude,
+                        "longitude" to user.longitude
+                    )
+                    findNavController().navigate(R.id.action_userListFragment_to_userDetailFragment, bundle)
                 }
             }
         }

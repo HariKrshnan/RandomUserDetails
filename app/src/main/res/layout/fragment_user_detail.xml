@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.UserDetailFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/userView"
+        style="@style/MyCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/userImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_launcher_foreground" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:paddingHorizontal="16dp"
+                android:text="@string/user_data"
+                android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userView">
+
+        <TextView
+            android:id="@+id/userDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:text="@string/user_description"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

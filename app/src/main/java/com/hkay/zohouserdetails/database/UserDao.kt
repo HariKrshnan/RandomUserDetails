@@ -1,6 +1,7 @@
 package com.hkay.zohouserdetails.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
@@ -11,4 +12,7 @@ interface UserDao {
 
     @Insert
     suspend fun insertAll(users: List<User>)
+
+    @Delete
+    suspend fun deleteAll(users: List<User>)
 }

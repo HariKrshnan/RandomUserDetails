@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.databinding.UserListItemBinding
 
@@ -36,6 +35,7 @@ class UserListAdapter(context: Context, private val listener: ((User?) -> Unit)?
         fun bind(item: User) {
             Glide.with(localContext)
                 .load(item.picture)
+                .fitCenter()
                 .into(binding.itemImageView)
             binding.itemTextView.text = item.name
             binding.root.setOnClickListener {
