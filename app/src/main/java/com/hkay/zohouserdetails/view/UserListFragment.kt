@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,6 +28,11 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private var adapter: UserListAdapter? = null
     private var _sGridLayoutManager: StaggeredGridLayoutManager? = null
     private var list: List<User>? = null
+    private val dbHelper = context?.let { UserDatabase.DatabaseBuilder.getInstance(it) }?.let {
+        DatabaseHelperImpl(
+            it
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +50,31 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         super.onStart()
         fetchDataFromDb()
         textChangeListener()
+        scrollListener()
+    }
+
+    private fun getUserDetails() {
+        if (dbHelper != null) {
+            viewModel.getUserDetails(dbHelper)
+        }
+    }
+
+    private fun scrollListener() {
+        binding.scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
+                Toast.makeText(activity, "Pagination", Toast.LENGTH_SHORT).show()
+                binding.loadingIndicator.visibility = View.VISIBLE
+                getUserDetails()
+                userDetailsObserver()
+            }
+        })
+    }
+
+    private fun userDetailsObserver() {
+        viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
+            fetchDataFromDb()
+            binding.loadingIndicator.visibility = View.GONE
+        })
     }
 
     private fun fetchDataFromDb() {
@@ -59,6 +90,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             if (user != null) {
                 list = user
                 setUpRecyclerView()
+                list?.let { updateRecyclerView(it) }
             } else Toast.makeText(activity, "Something went wrong", Toast.LENGTH_SHORT).show()
         })
     }
@@ -67,9 +99,9 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         binding.textField.editText?.doAfterTextChanged { text ->
             val searchList =
                 list?.filter { it.name?.contains(text.toString(), ignoreCase = true) == true }
-            if (searchList != null) {
-                updateRecyclerView(searchList)
-            }
+            if (searchList?.size == 0) Toast.makeText(activity, "No user found", Toast.LENGTH_SHORT)
+                .show()
+            if (searchList != null) updateRecyclerView(searchList)
         }
     }
 
@@ -89,13 +121,15 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
                         "latitude" to user.latitude,
                         "longitude" to user.longitude
                     )
-                    findNavController().navigate(R.id.action_userListFragment_to_userDetailFragment, bundle)
+                    findNavController().navigate(
+                        R.id.action_userListFragment_to_userDetailFragment,
+                        bundle
+                    )
                 }
             }
         }
         userListBinding?.userList?.adapter = adapter
         Log.i("Test", "SetUpRecyclerView")
-        list?.let { updateRecyclerView(it) }
     }
 
     private fun updateRecyclerView(list: List<User>) {
