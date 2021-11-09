@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/layout/activity_main.xml" value="0.14719202898550723" />
+        <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/layout/custom_toolbar.xml" value="0.22" />
         <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/layout/fragment_splash.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/layout/fragment_user_detail.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/layout/fragment_user_list.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/2310h/AndroidStudioProjects/ZohoUserDetails/app/src/main/res/layout/user_list_item.xml" value="0.184375" />
       </map>
@@ -15,5 +18,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.18802083333333333" />
+      </ProjectState>
+    </option>
   </component>
 </project>

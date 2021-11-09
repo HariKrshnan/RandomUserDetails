@@ -51,6 +51,10 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         fetchDataFromDb()
         textChangeListener()
         scrollListener()
+        binding.toolbar.setTitle("User title")
+        binding.toolbar.setTemperature("31")
+        binding.toolbar.setCity("Chennai")
+        binding.toolbar.setArea("KK Nagar")
     }
 
     private fun getUserDetails() {

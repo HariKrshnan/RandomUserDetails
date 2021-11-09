@@ -56,7 +56,5 @@ o
 ?app/src/main/java/com/hkay/zohouserdetails/model/Coordinates.kt,5\c\5c9d83e6147a5f63313e70d7db1f10aa540d1d8a
 n
 >app/src/main/java/com/hkay/zohouserdetails/model/Registered.kt,b\c\bc2ddc1832de8e7175c5ecc763dc5b1e1c44f58b
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 j
 :app/src/main/java/com/hkay/zohouserdetails/model/Result.kt,e\8\e86015831416b68dac0a4eaeb28dbb48776117fb
