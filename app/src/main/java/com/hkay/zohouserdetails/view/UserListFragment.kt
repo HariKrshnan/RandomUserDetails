@@ -51,10 +51,16 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         fetchDataFromDb()
         textChangeListener()
         scrollListener()
-        binding.toolbar.setTitle("User title")
-        binding.toolbar.setTemperature("31")
-        binding.toolbar.setCity("Chennai")
-        binding.toolbar.setArea("KK Nagar")
+        getWeatherData()
+    }
+
+    private fun getWeatherData() {
+        viewModel.getWeatherDetails()
+        viewModel.weatherResponseModel.observe(viewLifecycleOwner, {
+            binding.toolbar.setTemperature(it.wind?.deg.toString())
+            it.name?.let { it1 -> binding.toolbar.setCity(it1) }
+            it.weather?.firstOrNull()?.description?.let { it1 -> binding.toolbar.setArea(it1) }
+        })
     }
 
     private fun getUserDetails() {

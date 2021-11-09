@@ -7,10 +7,12 @@ import com.hkay.zohouserdetails.core.ApiHelper
 import com.hkay.zohouserdetails.database.DatabaseHelperImpl
 import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.model.ResponseModel
+import com.hkay.zohouserdetails.model.weathermodel.WeatherResponseModel
 import kotlinx.coroutines.*
 
 class UserViewModel : ViewModel() {
     val userDetailsResponse: MutableLiveData<ResponseModel> by lazy { MutableLiveData<ResponseModel>() }
+    val weatherResponseModel: MutableLiveData<WeatherResponseModel> by lazy { MutableLiveData<WeatherResponseModel>() }
     val userDetailsFromDb: MutableLiveData<List<User>> by lazy { MutableLiveData<List<User>>() }
     private val apiHelper: ApiHelper by lazy { ApiHelper() }
     var userResponse: ResponseModel? = null
@@ -44,6 +46,13 @@ class UserViewModel : ViewModel() {
     fun fetchDataFromDb(dbHelper: DatabaseHelperImpl) {
         viewModelScope.launch {
             userDetailsFromDb.postValue(dbHelper.getUsers())
+        }
+    }
+
+    fun getWeatherDetails() {
+        viewModelScope.launch {
+           val weatherResponse = apiHelper.getWeatherData()
+            weatherResponseModel.postValue(weatherResponse)
         }
     }
 }
