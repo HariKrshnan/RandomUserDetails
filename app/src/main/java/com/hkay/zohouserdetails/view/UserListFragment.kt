@@ -55,7 +55,8 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun getWeatherData() {
-        viewModel.getWeatherDetails()
+        val bundle = arguments
+        bundle?.getInt("latitude")?.let { viewModel.getWeatherDetails(it, bundle.getInt("longitude")) }
         viewModel.weatherResponseModel.observe(viewLifecycleOwner, {
             binding.toolbar.setTemperature(it.wind?.deg.toString())
             it.name?.let { it1 -> binding.toolbar.setCity(it1) }

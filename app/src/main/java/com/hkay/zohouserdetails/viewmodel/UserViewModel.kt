@@ -49,9 +49,9 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun getWeatherDetails() {
+    fun getWeatherDetails(lat: Int, long: Int) {
         viewModelScope.launch {
-           val weatherResponse = apiHelper.getWeatherData()
+           val weatherResponse = apiHelper.getWeatherData(lat, long)
             weatherResponseModel.postValue(weatherResponse)
         }
     }

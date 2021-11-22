@@ -16,6 +16,14 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"
             app:exitAnim="@anim/nav_default_pop_exit_anim"/>
+        <argument
+            android:name="latitude"
+            app:argType="integer"
+            android:defaultValue="15"/>
+        <argument
+            android:name="longitude"
+            app:argType="integer"
+            android:defaultValue="80"/>
     </fragment>
     <fragment
         android:id="@+id/userListFragment"

@@ -30,8 +30,8 @@ class ApiHelper {
         getRetrofitBuilder()
         return service?.getUsersInfo()
     }
-    suspend fun getWeatherData(): WeatherResponseModel? {
+    suspend fun getWeatherData(lat: Int, long: Int): WeatherResponseModel? {
         getRetrofitBuilder(1)
-        return  service?.getWeatherInfo()
+        return  service?.getWeatherInfo(lat, long)
     }
 }
