@@ -13,8 +13,8 @@ interface ApiService {
 
     @GET("weather")
     suspend fun getWeatherInfo(
-        @Query("lat")lat: Int = 13,
-        @Query("lon")lon: Int = 80,
+        @Query("lat")lat: Int,
+        @Query("lon")lon: Int,
         @Query("appid")apiKey: String = "38781e38750a335dd868104f722abf5d",
     ): WeatherResponseModel
 }

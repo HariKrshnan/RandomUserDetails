@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -54,9 +55,13 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
             if (it.results != null) {
                 lifecycleScope.launch {
-                    delay(3000)
+                    delay(5000)
+                    val bundle = bundleOf(
+                        "latitude" to latitude,
+                        "longitude" to longitude
+                    )
                     view?.findNavController()
-                        ?.navigate(R.id.action_splashFragment_to_userListFragment)
+                        ?.navigate(R.id.action_splashFragment_to_userListFragment, bundle)
                 }
             } else Toast.makeText(activity, "No Internet", Toast.LENGTH_SHORT).show()
         })
@@ -76,23 +81,21 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             fusedLocationClient?.lastLocation?.addOnCompleteListener(it) { task ->
                 if (task.isSuccessful && task.result != null) {
                     lastLocation = task.result
-                  latitude = lastLocation!!.latitude.toInt()
+                    latitude = lastLocation!!.latitude.toInt()
                     longitude = lastLocation!!.longitude.toInt()
                 } else {
-                    showMessage("No location detected. Make sure location is enabled on the device.")
+                    Toast.makeText(
+                        activity,
+                        "No location detected. Make sure location is enabled on the device.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
     }
 
-    private fun showMessage(string: String) {
-        Toast.makeText(activity, string, Toast.LENGTH_LONG).show()
-
-    }
-
     private fun showToast(
-        mainTextStringId: String, actionStringId: String,
-        listener: View.OnClickListener
+        mainTextStringId: String
     ) {
         Toast.makeText(activity, mainTextStringId, Toast.LENGTH_LONG).show()
     }
@@ -126,10 +129,8 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         }
         if (shouldProvideRationale == true) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.")
-            showToast("Location permission is needed for core functionality", "Okay",
-                View.OnClickListener {
-                    startLocationPermissionRequest()
-                })
+            showToast("Location permission is needed for core functionality")
+            startLocationPermissionRequest()
         } else {
             Log.i(TAG, "Requesting permission")
             startLocationPermissionRequest()
@@ -153,28 +154,25 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                     getLastLocation()
                 }
                 else -> {
-                    showToast("Permission was denied", "Settings",
-                        View.OnClickListener {
-                            // Build intent that displays the App settings screen.
-                            val intent = Intent()
-                            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            val uri = Uri.fromParts(
-                                "package",
-                                Build.DISPLAY, null
-                            )
-                            intent.data = uri
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
-                        }
+                    showToast("Permission was denied")
+                    // Build intent that displays the App settings screen.
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    val uri = Uri.fromParts(
+                        "package",
+                        Build.DISPLAY, null
                     )
+                    intent.data = uri
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                 }
             }
         }
     }
 
     companion object {
-        private val TAG = "LocationProvider"
-        private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+        private const val TAG = "LocationProvider"
+        private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     }
 
 
