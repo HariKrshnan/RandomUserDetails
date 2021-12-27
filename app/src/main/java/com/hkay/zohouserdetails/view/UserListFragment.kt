@@ -106,12 +106,12 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             StaggeredGridLayoutManager.VERTICAL
         )
         userListBinding?.userList?.layoutManager = _sGridLayoutManager
-        adapter = context?.let { it ->
-            UserListAdapter(it) { user ->
-                if (user != null) {
+        adapter = context?.let {
+            UserListAdapter(it).apply {
+                clickListener = { user ->
                     val bundle = bundleOf(
-                        "pictureUrl" to user.image,
-                        "userName" to user.name,
+                        "pictureUrl" to user?.image,
+                        "userName" to user?.name,
                         "latitude" to 89,
                         "longitude" to 89
                     )
@@ -119,11 +119,27 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
                         R.id.action_userListFragment_to_userDetailFragment, bundle
                     )
                 }
+                longClickListener = {
+                    Toast.makeText(activity, "Long press", Toast.LENGTH_SHORT).show()
+                    true
+                }
             }
         }
-        adapter?.longClickListener?.let {
-                Toast.makeText(context, "Long Press", Toast.LENGTH_SHORT).show()
-        }
+//        adapter = context?.let { it ->
+//            UserListAdapter(it) { user ->
+//                if (user != null) {
+//                    val bundle = bundleOf(
+//                        "pictureUrl" to user.image,
+//                        "userName" to user.name,
+//                        "latitude" to 89,
+//                        "longitude" to 89
+//                    )
+//                    findNavController().navigate(
+//                        R.id.action_userListFragment_to_userDetailFragment, bundle
+//                    )
+//                }
+//            }
+//        }
         userListBinding?.userList?.adapter = adapter
         Log.i("Test", "SetUpRecyclerView")
     }

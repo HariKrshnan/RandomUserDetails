@@ -13,11 +13,12 @@ import com.hkay.zohouserdetails.databinding.UserListItemBinding
 import com.hkay.zohouserdetails.model.rickandmorty.Characters
 
 class UserListAdapter(
-    context: Context,
-    private val listener: ((Characters?) -> Unit)? = null
+    context: Context
+//    private val listener: ((Characters?) -> Unit)? = null
 ) :
     ListAdapter<Characters, RecyclerView.ViewHolder>(UserDiffCallBack()) {
-    var longClickListener: ((Characters?) -> Boolean)? = null
+    var longClickListener: ((Characters?) -> Boolean?)? = null
+    var clickListener: ((Characters?) -> Unit)? = null
     val localContext = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -25,7 +26,14 @@ class UserListAdapter(
             UserListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserListViewHolder(
             binding
-        )
+        ).apply {
+            longClickListener = {
+                this@UserListAdapter.longClickListener?.invoke(it)!!
+            }
+            clickListener = {
+                this@UserListAdapter.clickListener?.invoke(it)
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -35,6 +43,9 @@ class UserListAdapter(
 
     inner class UserListViewHolder(private val binding: UserListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        var longClickListener: ((Characters?) -> Boolean)? = null
+        var clickListener: ((Characters?) -> Unit)? = null
+
         @SuppressLint("SetTextI18n")
         fun bind(item: Characters) {
             Glide.with(localContext)
@@ -42,8 +53,8 @@ class UserListAdapter(
                 .fitCenter()
                 .into(binding.itemImageView)
             binding.itemTextView.text = item.name
-            binding.root.setOnClickListener {
-                listener?.invoke(item)
+            binding.llImageView.setOnClickListener {
+                clickListener?.invoke(item)
             }
             binding.llImageView.setOnLongClickListener {
                 longClickListener?.invoke(item)
