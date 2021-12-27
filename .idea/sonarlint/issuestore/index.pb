@@ -15,9 +15,6 @@ Lapp/src/androidTest/java/com/hkay/zohouserdetails/ExampleInstrumentedTest.kt,d
 app/.gitignore,5\1\51e1c5d383dfaa35e0e7e5873a0a99355a86880f
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-:
-
-.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 ;
@@ -28,12 +25,8 @@ o
 ?app/src/main/java/com/hkay/zohouserdetails/view/MainActivity.kt,e\c\ec9d202cd029570981c61982529daa168ec2002d
 k
 ;app/src/main/java/com/hkay/zohouserdetails/database/User.kt,a\2\a208863ebf3299ce206d161081d6fa411c421e52
-n
->app/src/main/java/com/hkay/zohouserdetails/database/UserDao.kt,a\1\a168a401fd52e6f0f83f3cf697493e41d144b87a
 u
 Eapp/src/main/java/com/hkay/zohouserdetails/database/DataBaseHelper.kt,f\2\f2a8a74ed480feb703b2edbfda23d0c43013f18f
-q
-Aapp/src/main/java/com/hkay/zohouserdetails/model/ResponseModel.kt,f\8\f83f5bbf20a6255909b9eca751e519211ac4545e
 k
 ;app/src/main/java/com/hkay/zohouserdetails/model/Picture.kt,1\3\13327026983573abe66f646d1cfb1bbf7aa81c15
 h
@@ -56,5 +49,14 @@ o
 ?app/src/main/java/com/hkay/zohouserdetails/model/Coordinates.kt,5\c\5c9d83e6147a5f63313e70d7db1f10aa540d1d8a
 n
 >app/src/main/java/com/hkay/zohouserdetails/model/Registered.kt,b\c\bc2ddc1832de8e7175c5ecc763dc5b1e1c44f58b
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 j
 :app/src/main/java/com/hkay/zohouserdetails/model/Result.kt,e\8\e86015831416b68dac0a4eaeb28dbb48776117fb
+n
+>app/src/main/java/com/hkay/zohouserdetails/database/UserDao.kt,a\1\a168a401fd52e6f0f83f3cf697493e41d144b87a
+s
+Capp/src/main/java/com/hkay/zohouserdetails/database/UserDatabase.kt,9\1\918a4d1205552d2eb3ca9daa3710927e100da907
+q
+Aapp/src/main/java/com/hkay/zohouserdetails/model/ResponseModel.kt,f\8\f83f5bbf20a6255909b9eca751e519211ac4545e

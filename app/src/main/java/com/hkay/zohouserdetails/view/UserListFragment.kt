@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +18,7 @@ import com.hkay.zohouserdetails.database.DatabaseHelperImpl
 import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.database.UserDatabase
 import com.hkay.zohouserdetails.databinding.FragmentUserListBinding
+import com.hkay.zohouserdetails.model.rickandmorty.Characters
 import com.hkay.zohouserdetails.viewmodel.UserViewModel
 
 
@@ -27,7 +27,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private val binding get() = userListBinding!!
     private var adapter: UserListAdapter? = null
     private var _sGridLayoutManager: StaggeredGridLayoutManager? = null
-    private var list: List<User>? = null
+    private var list: List<Characters>? = null
     private val dbHelper = context?.let { UserDatabase.DatabaseBuilder.getInstance(it) }?.let {
         DatabaseHelperImpl(
             it
@@ -45,18 +45,24 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
     private val viewModel by viewModels<UserViewModel>()
 
-    @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
-        fetchDataFromDb()
         textChangeListener()
-        scrollListener()
+        getUserDetails()
         getWeatherData()
+        viewModel.rickyMortyResponseModel.observe(viewLifecycleOwner, {
+            binding.loadingIndicator.visibility = View.GONE
+            setUpRecyclerView()
+            updateRecyclerView(it)
+            list = it
+        })
     }
 
     private fun getWeatherData() {
         val bundle = arguments
-        bundle?.getInt("latitude")?.let { viewModel.getWeatherDetails(it, bundle.getInt("longitude")) }
+        viewModel.getWeatherDetails(76, 89)
+//        bundle?.getInt("latitude")?.let {
+//            viewModel.getWeatherDetails(89, 89) }
         viewModel.weatherResponseModel.observe(viewLifecycleOwner, {
             binding.toolbar.setTemperature(it.wind?.deg.toString())
             it.name?.let { it1 -> binding.toolbar.setCity(it1) }
@@ -65,27 +71,8 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun getUserDetails() {
-        if (dbHelper != null) {
-            viewModel.getUserDetails(dbHelper)
-        }
-    }
-
-    private fun scrollListener() {
-        binding.scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
-                Toast.makeText(activity, "Pagination", Toast.LENGTH_SHORT).show()
-                binding.loadingIndicator.visibility = View.VISIBLE
-                getUserDetails()
-                userDetailsObserver()
-            }
-        })
-    }
-
-    private fun userDetailsObserver() {
-        viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
-            fetchDataFromDb()
-            binding.loadingIndicator.visibility = View.GONE
-        })
+        binding.loadingIndicator.visibility = View.VISIBLE
+        viewModel.getUserDetails()
     }
 
     private fun fetchDataFromDb() {
@@ -97,19 +84,15 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         if (dbHelper != null) {
             viewModel.fetchDataFromDb(dbHelper)
         }
-        viewModel.userDetailsFromDb.observe(viewLifecycleOwner, { user ->
-            if (user != null) {
-                list = user
-                setUpRecyclerView()
-                list?.let { updateRecyclerView(it) }
-            } else Toast.makeText(activity, "Something went wrong", Toast.LENGTH_SHORT).show()
+        viewModel.userDetailsFromDb.observe(viewLifecycleOwner, {
+
         })
     }
 
     private fun textChangeListener() {
         binding.textField.editText?.doAfterTextChanged { text ->
             val searchList =
-                list?.filter { it.name?.contains(text.toString(), ignoreCase = true) == true }
+                list?.filter { it.name.contains(text.toString(), ignoreCase = true) }
             if (searchList?.size == 0) Toast.makeText(activity, "No user found", Toast.LENGTH_SHORT)
                 .show()
             if (searchList != null) updateRecyclerView(searchList)
@@ -127,23 +110,25 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             UserListAdapter(it) { user ->
                 if (user != null) {
                     val bundle = bundleOf(
-                        "pictureUrl" to user.picture,
+                        "pictureUrl" to user.image,
                         "userName" to user.name,
-                        "latitude" to user.latitude,
-                        "longitude" to user.longitude
+                        "latitude" to 89,
+                        "longitude" to 89
                     )
                     findNavController().navigate(
-                        R.id.action_userListFragment_to_userDetailFragment,
-                        bundle
+                        R.id.action_userListFragment_to_userDetailFragment, bundle
                     )
                 }
             }
+        }
+        adapter?.longClickListener?.let {
+                Toast.makeText(context, "Long Press", Toast.LENGTH_SHORT).show()
         }
         userListBinding?.userList?.adapter = adapter
         Log.i("Test", "SetUpRecyclerView")
     }
 
-    private fun updateRecyclerView(list: List<User>) {
+    private fun updateRecyclerView(list: List<Characters>) {
         adapter?.submitList(list)
     }
 

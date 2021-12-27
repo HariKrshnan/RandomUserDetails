@@ -46,32 +46,31 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     override fun onStart() {
         super.onStart()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-        if (!checkPermissions()) {
-            requestPermissions()
-        } else {
-            getLastLocation()
-        }
-        viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
-            if (it.results != null) {
-                lifecycleScope.launch {
-                    delay(5000)
-                    val bundle = bundleOf(
-                        "latitude" to latitude,
-                        "longitude" to longitude
-                    )
-                    view?.findNavController()
-                        ?.navigate(R.id.action_splashFragment_to_userListFragment, bundle)
-                }
-            } else Toast.makeText(activity, "No Internet", Toast.LENGTH_SHORT).show()
-        })
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+//        if (!checkPermissions()) {
+//            requestPermissions()
+//        } else {
+//            getLastLocation()
+//        }
+        view?.findNavController()
+            ?.navigate(R.id.action_splashFragment_to_userListFragment)
+//        viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
+//            if (it.results != null) {
+//                lifecycleScope.launch {
+//                    delay(5000)
+//                    val bundle = bundleOf(
+//                        "latitude" to latitude,
+//                        "longitude" to longitude
+//                    )
+//                    view?.findNavController()
+//                        ?.navigate(R.id.action_splashFragment_to_userListFragment, bundle)
+//                }
+//            } else Toast.makeText(activity, "No Internet", Toast.LENGTH_SHORT).show()
+//        })
         val dbHelper = context?.let { UserDatabase.DatabaseBuilder.getInstance(it) }?.let {
             DatabaseHelperImpl(
                 it
             )
-        }
-        if (dbHelper != null) {
-            getUserDetails(dbHelper)
         }
     }
 
@@ -173,11 +172,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     companion object {
         private const val TAG = "LocationProvider"
         private const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
-    }
-
-
-    private fun getUserDetails(dbHelper: DatabaseHelperImpl) {
-        viewModel.getUserDetails(dbHelper)
     }
 }
 
