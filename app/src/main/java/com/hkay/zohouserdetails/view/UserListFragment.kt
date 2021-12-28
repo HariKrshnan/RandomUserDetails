@@ -1,6 +1,7 @@
 package com.hkay.zohouserdetails.view
 
-import android.os.Bundle
+import android.content.Context
+import android.os.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -126,6 +127,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
                     }
                     dialogFragment.arguments = args
                     dialogFragment.show(childFragmentManager, "Dialog")
+                    vibratePhone()
                     true
                 }
             }
@@ -137,6 +139,19 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
     private fun updateRecyclerView(list: List<Characters>) {
         adapter?.submitList(list)
+    }
+
+    private fun vibratePhone() {
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (activity?.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(200)
+        }
     }
 
     override fun onDestroyView() {
