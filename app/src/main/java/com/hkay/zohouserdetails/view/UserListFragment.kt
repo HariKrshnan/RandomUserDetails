@@ -1,6 +1,5 @@
 package com.hkay.zohouserdetails.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hkay.zohouserdetails.R
 import com.hkay.zohouserdetails.database.DatabaseHelperImpl
-import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.database.UserDatabase
 import com.hkay.zohouserdetails.databinding.FragmentUserListBinding
 import com.hkay.zohouserdetails.model.rickandmorty.Characters
@@ -45,8 +43,8 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
     private val viewModel by viewModels<UserViewModel>()
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         textChangeListener()
         getUserDetails()
         getWeatherData()
@@ -119,27 +117,20 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
                         R.id.action_userListFragment_to_userDetailFragment, bundle
                     )
                 }
-                longClickListener = {
-                    Toast.makeText(activity, "Long press", Toast.LENGTH_SHORT).show()
+                longClickListener = { user ->
+                    val dialogFragment = ImagePreviewDialog()
+                    val args = Bundle()
+                    if (user != null) {
+                        args.putString("pictureUrl", user.image)
+                        args.putString("name", user.name)
+                    }
+                    dialogFragment.arguments = args
+                    dialogFragment.show(childFragmentManager, "Dialog")
                     true
                 }
             }
         }
-//        adapter = context?.let { it ->
-//            UserListAdapter(it) { user ->
-//                if (user != null) {
-//                    val bundle = bundleOf(
-//                        "pictureUrl" to user.image,
-//                        "userName" to user.name,
-//                        "latitude" to 89,
-//                        "longitude" to 89
-//                    )
-//                    findNavController().navigate(
-//                        R.id.action_userListFragment_to_userDetailFragment, bundle
-//                    )
-//                }
-//            }
-//        }
+
         userListBinding?.userList?.adapter = adapter
         Log.i("Test", "SetUpRecyclerView")
     }
