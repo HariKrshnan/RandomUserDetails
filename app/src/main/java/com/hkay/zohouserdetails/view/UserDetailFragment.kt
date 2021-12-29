@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.hkay.zohouserdetails.R
@@ -19,6 +22,14 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
         savedInstanceState: Bundle?
     ): View {
         userDetailBinding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        binding.composeView.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+              MaterialTheme {
+                  Text(text = "Compose view")
+              }
+            }
+        }
         return binding.root
     }
     override fun onStart() {
@@ -35,5 +46,10 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
                 .fitCenter()
                 .into(binding.userImage)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        userDetailBinding = null
     }
 }
