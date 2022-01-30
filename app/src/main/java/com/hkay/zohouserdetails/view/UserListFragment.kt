@@ -51,7 +51,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         fetchDataFromDb()
         textChangeListener()
         scrollListener()
-        getWeatherData()
+//        getWeatherData()
     }
 
     private fun getWeatherData() {

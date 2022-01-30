@@ -1,4 +1,4 @@
-package com.hkay.zohouserdetails.core
+package com.hkay.zohouserdetails.api
 
 import android.content.Context
 import android.net.ConnectivityManager

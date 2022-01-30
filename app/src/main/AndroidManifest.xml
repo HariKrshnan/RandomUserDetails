@@ -14,7 +14,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ZohoUserDetails">
+        android:theme="@style/Theme.ZohoUserDetails"
+        android:name=".view.App">
         <activity
             android:name=".view.MainActivity"
             android:exported="true">

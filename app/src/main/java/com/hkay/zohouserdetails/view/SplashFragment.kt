@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {
-    private val viewModel by viewModels<UserViewModel>()
+    private val viewModel: UserViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
     private var lastLocation: Location? = null
     private var latitude = 0

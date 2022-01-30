@@ -1,4 +1,4 @@
-package com.hkay.zohouserdetails.core
+package com.hkay.zohouserdetails.api
 
 import com.hkay.zohouserdetails.model.ResponseModel
 import com.hkay.zohouserdetails.model.weathermodel.WeatherResponseModel

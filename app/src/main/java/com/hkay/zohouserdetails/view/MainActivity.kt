@@ -9,9 +9,10 @@ import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

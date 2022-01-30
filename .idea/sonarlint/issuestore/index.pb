@@ -13,8 +13,6 @@ F
 Lapp/src/androidTest/java/com/hkay/zohouserdetails/ExampleInstrumentedTest.kt,d\3\d34035f55c52280ab3d9e9a16313dc7759fb354b
 >
 app/.gitignore,5\1\51e1c5d383dfaa35e0e7e5873a0a99355a86880f
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
@@ -24,16 +22,10 @@ X
 gradlew.bat,2\a\2a45a911a8f1836b0b6c5b758962572012d8f8c3
 7
 gradlew,5\b\5bbfa66edb4db3c7c33c5181f43510990d3307f9
-o
-?app/src/main/java/com/hkay/zohouserdetails/view/MainActivity.kt,e\c\ec9d202cd029570981c61982529daa168ec2002d
-k
-;app/src/main/java/com/hkay/zohouserdetails/database/User.kt,a\2\a208863ebf3299ce206d161081d6fa411c421e52
 n
 >app/src/main/java/com/hkay/zohouserdetails/database/UserDao.kt,a\1\a168a401fd52e6f0f83f3cf697493e41d144b87a
 u
 Eapp/src/main/java/com/hkay/zohouserdetails/database/DataBaseHelper.kt,f\2\f2a8a74ed480feb703b2edbfda23d0c43013f18f
-q
-Aapp/src/main/java/com/hkay/zohouserdetails/model/ResponseModel.kt,f\8\f83f5bbf20a6255909b9eca751e519211ac4545e
 k
 ;app/src/main/java/com/hkay/zohouserdetails/model/Picture.kt,1\3\13327026983573abe66f646d1cfb1bbf7aa81c15
 h
@@ -58,3 +50,7 @@ n
 >app/src/main/java/com/hkay/zohouserdetails/model/Registered.kt,b\c\bc2ddc1832de8e7175c5ecc763dc5b1e1c44f58b
 j
 :app/src/main/java/com/hkay/zohouserdetails/model/Result.kt,e\8\e86015831416b68dac0a4eaeb28dbb48776117fb
+r
+Bapp/src/main/java/com/hkay/zohouserdetails/view/UserListAdapter.kt,4\f\4fe6518717dd6193b0288fbb30b39b1bd80388ac
+k
+;app/src/main/java/com/hkay/zohouserdetails/database/User.kt,a\2\a208863ebf3299ce206d161081d6fa411c421e52
