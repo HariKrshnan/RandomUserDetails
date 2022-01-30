@@ -11,7 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hkay.zohouserdetails.R
@@ -23,8 +23,7 @@ import com.hkay.zohouserdetails.viewmodel.UserViewModel
 
 
 class UserListFragment : Fragment(R.layout.fragment_user_list) {
-    private var userListBinding: FragmentUserListBinding? = null
-    private val binding get() = userListBinding!!
+    private lateinit var userListBinding: FragmentUserListBinding
     private var adapter: UserListAdapter? = null
     private var _sGridLayoutManager: StaggeredGridLayoutManager? = null
     private var list: List<User>? = null
@@ -40,10 +39,10 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         savedInstanceState: Bundle?
     ): View {
         userListBinding = FragmentUserListBinding.inflate(inflater, container, false)
-        return binding.root
+        return userListBinding.root
     }
 
-    private val viewModel by viewModels<UserViewModel>()
+    private val viewModel:  UserViewModel by activityViewModels()
 
     @SuppressLint("SetTextI18n")
     override fun onStart() {
@@ -58,9 +57,9 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         val bundle = arguments
         bundle?.getInt("latitude")?.let { viewModel.getWeatherDetails(it, bundle.getInt("longitude")) }
         viewModel.weatherResponseModel.observe(viewLifecycleOwner, {
-            binding.toolbar.setTemperature(it.wind?.deg.toString())
-            it.name?.let { it1 -> binding.toolbar.setCity(it1) }
-            it.weather?.firstOrNull()?.description?.let { it1 -> binding.toolbar.setArea(it1) }
+            userListBinding.toolbar.setTemperature(it.wind?.deg.toString())
+            it.name?.let { it1 -> userListBinding.toolbar.setCity(it1) }
+            it.weather?.firstOrNull()?.description?.let { it1 -> userListBinding.toolbar.setArea(it1) }
         })
     }
 
@@ -71,10 +70,10 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun scrollListener() {
-        binding.scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+        userListBinding.scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
             if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
                 Toast.makeText(activity, "Pagination", Toast.LENGTH_SHORT).show()
-                binding.loadingIndicator.visibility = View.VISIBLE
+                userListBinding.loadingIndicator.visibility = View.VISIBLE
                 getUserDetails()
                 userDetailsObserver()
             }
@@ -84,7 +83,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private fun userDetailsObserver() {
         viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
             fetchDataFromDb()
-            binding.loadingIndicator.visibility = View.GONE
+            userListBinding.loadingIndicator.visibility = View.GONE
         })
     }
 
@@ -107,7 +106,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun textChangeListener() {
-        binding.textField.editText?.doAfterTextChanged { text ->
+        userListBinding.textField.editText?.doAfterTextChanged { text ->
             val searchList =
                 list?.filter { it.name?.contains(text.toString(), ignoreCase = true) == true }
             if (searchList?.size == 0) Toast.makeText(activity, "No user found", Toast.LENGTH_SHORT)
@@ -145,10 +144,5 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
     private fun updateRecyclerView(list: List<User>) {
         adapter?.submitList(list)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        userListBinding = null
     }
 }

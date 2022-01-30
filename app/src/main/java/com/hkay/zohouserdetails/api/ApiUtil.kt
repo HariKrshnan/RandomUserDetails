@@ -13,7 +13,7 @@ class ApiUtil {
     init {
        getRetrofitBuilder()
     }
-    fun getRetrofitBuilder(state: Int = 0) {
+    private fun getRetrofitBuilder(state: Int = 0) {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()

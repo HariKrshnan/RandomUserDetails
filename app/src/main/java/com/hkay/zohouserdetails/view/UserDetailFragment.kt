@@ -10,15 +10,14 @@ import com.hkay.zohouserdetails.R
 import com.hkay.zohouserdetails.databinding.FragmentUserDetailBinding
 
 class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
-    private var userDetailBinding: FragmentUserDetailBinding? = null
-    private val binding get() = userDetailBinding!!
+    private lateinit var binding: FragmentUserDetailBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        userDetailBinding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        binding = FragmentUserDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onStart() {

@@ -50,7 +50,5 @@ n
 >app/src/main/java/com/hkay/zohouserdetails/model/Registered.kt,b\c\bc2ddc1832de8e7175c5ecc763dc5b1e1c44f58b
 j
 :app/src/main/java/com/hkay/zohouserdetails/model/Result.kt,e\8\e86015831416b68dac0a4eaeb28dbb48776117fb
-r
-Bapp/src/main/java/com/hkay/zohouserdetails/view/UserListAdapter.kt,4\f\4fe6518717dd6193b0288fbb30b39b1bd80388ac
 k
 ;app/src/main/java/com/hkay/zohouserdetails/database/User.kt,a\2\a208863ebf3299ce206d161081d6fa411c421e52

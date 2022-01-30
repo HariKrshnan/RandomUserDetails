@@ -12,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -21,9 +20,6 @@ class ApplicationModule {
 
     @Provides
     fun providesBaseUrl() = "https://randomuser.me/"
-
-//    @Provides
-//    fun providesWeatherUrl() = "https://api.openweathermap.org/data/2.5/"
 
     @Provides
     @Singleton
