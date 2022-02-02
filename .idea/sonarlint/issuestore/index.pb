@@ -13,9 +13,6 @@ F
 Lapp/src/androidTest/java/com/hkay/zohouserdetails/ExampleInstrumentedTest.kt,d\3\d34035f55c52280ab3d9e9a16313dc7759fb354b
 >
 app/.gitignore,5\1\51e1c5d383dfaa35e0e7e5873a0a99355a86880f
-:
-
-.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 ;
@@ -52,3 +49,8 @@ j
 :app/src/main/java/com/hkay/zohouserdetails/model/Result.kt,e\8\e86015831416b68dac0a4eaeb28dbb48776117fb
 k
 ;app/src/main/java/com/hkay/zohouserdetails/database/User.kt,a\2\a208863ebf3299ce206d161081d6fa411c421e52
+r
+Bapp/src/main/java/com/hkay/zohouserdetails/view/UserListAdapter.kt,4\f\4fe6518717dd6193b0288fbb30b39b1bd80388ac
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302

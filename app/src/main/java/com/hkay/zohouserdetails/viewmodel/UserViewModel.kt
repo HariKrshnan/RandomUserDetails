@@ -3,14 +3,18 @@ package com.hkay.zohouserdetails.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.hkay.zohouserdetails.api.ApiHelper
 import com.hkay.zohouserdetails.database.DatabaseHelperImpl
 import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.model.ResponseModel
+import com.hkay.zohouserdetails.model.Result
 import com.hkay.zohouserdetails.model.weathermodel.WeatherResponseModel
 import com.hkay.zohouserdetails.repo.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,9 +24,14 @@ class UserViewModel @Inject constructor(private val mainRepository: MainReposito
     val userDetailsFromDb: MutableLiveData<List<User>> by lazy { MutableLiveData<List<User>>() }
     private val apiUtil: ApiHelper? = null
     var userResponse: ResponseModel? = null
+    private lateinit var _usersFlow: Flow<PagingData<Result>>
+    val usersFlow: Flow<PagingData<Result>>
+        get() = _usersFlow
+
+    //Fetching and storing in DB
     fun getUserDetails(dbHelper: DatabaseHelperImpl) {
         viewModelScope.launch {
-            userResponse = mainRepository.getUsers(25)
+            //userResponse = mainRepository.getUsers(25)
             val usersList = mutableListOf<User>()
             val len = userResponse?.results?.size
             if (len != null)
@@ -45,6 +54,10 @@ class UserViewModel @Inject constructor(private val mainRepository: MainReposito
             dbHelper.insertAll(usersList)
             userDetailsResponse.postValue(userResponse)
         }
+    }
+    //Pagination call
+    fun getUsersStreams() = viewModelScope.launch {
+        mainRepository.getUsersStream(25).cachedIn(viewModelScope)
     }
 
     fun fetchDataFromDb(dbHelper: DatabaseHelperImpl) {
