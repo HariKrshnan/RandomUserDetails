@@ -1,40 +1,40 @@
 package com.hkay.zohouserdetails.pagination
 
+import android.net.Uri
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.hkay.zohouserdetails.api.ApiHelper
-import com.hkay.zohouserdetails.model.ResponseModel
-import com.hkay.zohouserdetails.model.Result
+import com.hkay.zohouserdetails.api.ApiService
+import com.hkay.zohouserdetails.model.rick_n_morty.Characters
 import retrofit2.HttpException
 import java.io.IOException
 
 class UsersPagingSource(
-    private val apiHelper: ApiHelper,
-    private val count: Int
-) : PagingSource<Int, Result>() {
-    override fun getRefreshKey(state: PagingState<Int, Result>): Int? {
+    private val apiHelper: ApiService) : PagingSource<Int, Characters>() {
+    override fun getRefreshKey(state: PagingState<Int, Characters>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
-        val position = params.key ?: 1
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Characters> {
+        val pageNumber = params.key ?: 1
         return try {
-           val response = apiHelper.getUsersInfo(count)
-           val result = response.results
-            val nextKey = if (result.isEmpty()) {
-                null
-            } else {
-                // initial load size = 3 * NETWORK_PAGE_SIZE
-                // ensure we're not requesting duplicating items, at the 2nd request
-                position + (params.loadSize / 30)
+           val response = apiHelper.getAllCharacters(pageNumber)
+           val result = response.body()
+            val data = result?.results
+            var nextPageNumber: Int? = null
+            if (result?.pageInfo?.next != null) {
+                val uri = Uri.parse(result.pageInfo.next)
+                val nextPageQuery = uri.getQueryParameter("page")
+                nextPageNumber = nextPageQuery?.toInt()
+                Log.i("NEWPage", "new page loaded $nextPageNumber")
             }
             LoadResult.Page(
-                data = result,
-                prevKey = if (position == 1) null else position - 1,
-                nextKey = nextKey
+                data = data.orEmpty(),
+                prevKey = if (pageNumber == 1) null else pageNumber - 1,
+                nextKey = nextPageNumber
             )
         } catch (e: IOException) {
             LoadResult.Error(e)

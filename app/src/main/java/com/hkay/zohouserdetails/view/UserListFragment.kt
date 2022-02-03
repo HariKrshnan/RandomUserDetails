@@ -6,12 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hkay.zohouserdetails.R
@@ -20,6 +22,7 @@ import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.database.UserDatabase
 import com.hkay.zohouserdetails.databinding.FragmentUserListBinding
 import com.hkay.zohouserdetails.viewmodel.UserViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 
 class UserListFragment : Fragment(R.layout.fragment_user_list) {
@@ -42,20 +45,32 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         return userListBinding.root
     }
 
-    private val viewModel:  UserViewModel by activityViewModels()
+    private val viewModel: UserViewModel by activityViewModels()
 
     @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
-        fetchDataFromDb()
-        textChangeListener()
-        scrollListener()
+//        fetchDataFromDb()
+//        textChangeListener()
+//        scrollListener()
 //        getWeatherData()
+        getAllCharacters()
+    }
+
+    private fun getAllCharacters() {
+//        viewModel.getAllCharacters()
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.charactersFlow.collectLatest { pagingData ->
+                setUpRecyclerView()
+                adapter?.submitData(pagingData)
+            }
+        }
     }
 
     private fun getWeatherData() {
         val bundle = arguments
-        bundle?.getInt("latitude")?.let { viewModel.getWeatherDetails(it, bundle.getInt("longitude")) }
+        bundle?.getInt("latitude")
+            ?.let { viewModel.getWeatherDetails(it, bundle.getInt("longitude")) }
         viewModel.weatherResponseModel.observe(viewLifecycleOwner, {
             userListBinding.toolbar.setTemperature(it.wind?.deg.toString())
             it.name?.let { it1 -> userListBinding.toolbar.setCity(it1) }
@@ -70,14 +85,14 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun scrollListener() {
-        userListBinding.scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
-                Toast.makeText(activity, "Pagination", Toast.LENGTH_SHORT).show()
-                userListBinding.loadingIndicator.visibility = View.VISIBLE
-                getUserDetails()
-                userDetailsObserver()
-            }
-        })
+//        userListBinding.scrollView.setOnScrollChangeListener(ScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+//            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
+//                Toast.makeText(activity, "Pagination", Toast.LENGTH_SHORT).show()
+//                userListBinding.loadingIndicator.visibility = View.VISIBLE
+//                getUserDetails()
+//                userDetailsObserver()
+//            }
+//        })
     }
 
     private fun userDetailsObserver() {
@@ -100,7 +115,9 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             if (user != null) {
                 list = user
                 setUpRecyclerView()
-                list?.let { updateRecyclerView(it) }
+                list?.let {
+//                    updateRecyclerView(it)
+                                    }
             } else Toast.makeText(activity, "Something went wrong", Toast.LENGTH_SHORT).show()
         })
     }
@@ -111,25 +128,25 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
                 list?.filter { it.name?.contains(text.toString(), ignoreCase = true) == true }
             if (searchList?.size == 0) Toast.makeText(activity, "No user found", Toast.LENGTH_SHORT)
                 .show()
-            if (searchList != null) updateRecyclerView(searchList)
+//            if (searchList != null) updateRecyclerView(searchList)
         }
     }
 
     private fun setUpRecyclerView() {
-        userListBinding?.userList?.setHasFixedSize(true)
+        userListBinding.userList.setHasFixedSize(true)
         _sGridLayoutManager = StaggeredGridLayoutManager(
             2,
             StaggeredGridLayoutManager.VERTICAL
         )
-        userListBinding?.userList?.layoutManager = _sGridLayoutManager
+        userListBinding.userList.layoutManager = _sGridLayoutManager
         adapter = context?.let { it ->
             UserListAdapter(it) { user ->
                 if (user != null) {
                     val bundle = bundleOf(
-                        "pictureUrl" to user.picture,
-                        "userName" to user.name,
-                        "latitude" to user.latitude,
-                        "longitude" to user.longitude
+                        "pictureUrl" to user.image,
+                        "userName" to user.name
+//                        "latitude" to user.latitude,
+//                        "longitude" to user.longitude
                     )
                     findNavController().navigate(
                         R.id.action_userListFragment_to_userDetailFragment,
@@ -143,6 +160,10 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun updateRecyclerView(list: List<User>) {
-        adapter?.submitList(list)
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.charactersFlow.collectLatest { pagingData ->
+                adapter?.submitData(pagingData)
+            }
+        }
     }
 }

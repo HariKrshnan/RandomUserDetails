@@ -13,10 +13,10 @@ import javax.inject.Inject
 class MainRepository @Inject constructor(private val apiHelper: ApiHelper) {
     suspend fun getUsers(usersCount: Int) = apiHelper.getUsersInfo(usersCount)
 
-    fun getUsersStream(count: Int): Flow<PagingData<Result>> {
-        return Pager(
-            config = PagingConfig(pageSize = count, enablePlaceholders = false),
-            pagingSourceFactory = { UsersPagingSource(apiHelper, count) }
-        ).flow
-    }
+//    fun getUsersStream(count: Int): Flow<PagingData<Result>> {
+//        return Pager(
+//            config = PagingConfig(pageSize = count, enablePlaceholders = false),
+//            pagingSourceFactory = { UsersPagingSource(apiHelper, count) }
+//        ).flow
+//    }
 }

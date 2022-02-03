@@ -48,11 +48,13 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     override fun onStart() {
         super.onStart()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-        if (!checkPermissions()) {
-            requestPermissions()
-        } else {
-            getLastLocation()
-        }
+        view?.findNavController()
+            ?.navigate(R.id.action_splashFragment_to_userListFragment)
+//        if (!checkPermissions()) {
+//            requestPermissions()
+//        } else {
+//            getLastLocation()
+//        }
         viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
             if (it.results != null) {
                 lifecycleScope.launch {
@@ -72,7 +74,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             )
         }
         if (dbHelper != null) {
-            getUserDetails(dbHelper)
+//            getUserDetails(dbHelper)
         }
     }
 

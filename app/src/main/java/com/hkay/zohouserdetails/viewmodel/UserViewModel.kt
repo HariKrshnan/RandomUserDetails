@@ -9,24 +9,23 @@ import com.hkay.zohouserdetails.api.ApiHelper
 import com.hkay.zohouserdetails.database.DatabaseHelperImpl
 import com.hkay.zohouserdetails.database.User
 import com.hkay.zohouserdetails.model.ResponseModel
-import com.hkay.zohouserdetails.model.Result
+import com.hkay.zohouserdetails.model.rick_n_morty.Characters
 import com.hkay.zohouserdetails.model.weathermodel.WeatherResponseModel
-import com.hkay.zohouserdetails.repo.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
+class UserViewModel @Inject constructor(private val apiHelper: ApiHelper) : ViewModel() {
     val userDetailsResponse: MutableLiveData<ResponseModel> by lazy { MutableLiveData<ResponseModel>() }
     val weatherResponseModel: MutableLiveData<WeatherResponseModel> by lazy { MutableLiveData<WeatherResponseModel>() }
     val userDetailsFromDb: MutableLiveData<List<User>> by lazy { MutableLiveData<List<User>>() }
     private val apiUtil: ApiHelper? = null
     var userResponse: ResponseModel? = null
-    private lateinit var _usersFlow: Flow<PagingData<Result>>
-    val usersFlow: Flow<PagingData<Result>>
-        get() = _usersFlow
+    private lateinit var _charactersFlow: Flow<PagingData<Characters>>
+    val charactersFlow: Flow<PagingData<Characters>>
+        get() = _charactersFlow
 
     //Fetching and storing in DB
     fun getUserDetails(dbHelper: DatabaseHelperImpl) {
@@ -55,9 +54,12 @@ class UserViewModel @Inject constructor(private val mainRepository: MainReposito
             userDetailsResponse.postValue(userResponse)
         }
     }
+    init {
+        getAllCharacters()
+    }
     //Pagination call
-    fun getUsersStreams() = viewModelScope.launch {
-        mainRepository.getUsersStream(25).cachedIn(viewModelScope)
+    private fun getAllCharacters() = viewModelScope.launch {
+        _charactersFlow = apiHelper.getAllCharacters().cachedIn(viewModelScope)
     }
 
     fun fetchDataFromDb(dbHelper: DatabaseHelperImpl) {
