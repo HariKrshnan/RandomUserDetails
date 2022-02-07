@@ -6,10 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.core.widget.NestedScrollView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -23,11 +21,14 @@ import com.hkay.zohouserdetails.database.UserDatabase
 import com.hkay.zohouserdetails.databinding.FragmentUserListBinding
 import com.hkay.zohouserdetails.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 
 class UserListFragment : Fragment(R.layout.fragment_user_list) {
+    val mainActivity: MainActivity = MainActivity()
     private lateinit var userListBinding: FragmentUserListBinding
-    private var adapter: UserListAdapter? = null
+    @set: Inject
+    var adapter: UserListAdapter? = null
     private var _sGridLayoutManager: StaggeredGridLayoutManager? = null
     private var list: List<User>? = null
     private val dbHelper = context?.let { UserDatabase.DatabaseBuilder.getInstance(it) }?.let {
@@ -52,13 +53,11 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         super.onStart()
 //        fetchDataFromDb()
 //        textChangeListener()
-//        scrollListener()
 //        getWeatherData()
         getAllCharacters()
     }
 
     private fun getAllCharacters() {
-//        viewModel.getAllCharacters()
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.charactersFlow.collectLatest { pagingData ->
                 setUpRecyclerView()
@@ -80,26 +79,8 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
     private fun getUserDetails() {
         if (dbHelper != null) {
-            viewModel.getUserDetails(dbHelper)
+//            viewModel.getUserDetails(dbHelper)
         }
-    }
-
-    private fun scrollListener() {
-//        userListBinding.scrollView.setOnScrollChangeListener(ScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-//            if (scrollY == (v.getChildAt(0).measuredHeight - v.measuredHeight)) {
-//                Toast.makeText(activity, "Pagination", Toast.LENGTH_SHORT).show()
-//                userListBinding.loadingIndicator.visibility = View.VISIBLE
-//                getUserDetails()
-//                userDetailsObserver()
-//            }
-//        })
-    }
-
-    private fun userDetailsObserver() {
-        viewModel.userDetailsResponse.observe(viewLifecycleOwner, {
-            fetchDataFromDb()
-            userListBinding.loadingIndicator.visibility = View.GONE
-        })
     }
 
     private fun fetchDataFromDb() {

@@ -8,9 +8,10 @@ import com.hkay.zohouserdetails.api.ApiService
 import com.hkay.zohouserdetails.model.rick_n_morty.Characters
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-class UsersPagingSource(
-    private val apiHelper: ApiService) : PagingSource<Int, Characters>() {
+class UsersPagingSource
+@Inject constructor(private val apiHelper: ApiService) : PagingSource<Int, Characters>() {
     override fun getRefreshKey(state: PagingState<Int, Characters>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
@@ -21,8 +22,8 @@ class UsersPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Characters> {
         val pageNumber = params.key ?: 1
         return try {
-           val response = apiHelper.getAllCharacters(pageNumber)
-           val result = response.body()
+            val response = apiHelper.getAllCharacters(pageNumber)
+            val result = response.body()
             val data = result?.results
             var nextPageNumber: Int? = null
             if (result?.pageInfo?.next != null) {

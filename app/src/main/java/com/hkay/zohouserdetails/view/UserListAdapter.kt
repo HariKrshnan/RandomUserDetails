@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hkay.zohouserdetails.databinding.UserListItemBinding
 import com.hkay.zohouserdetails.model.rick_n_morty.Characters
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserListAdapter(context: Context, private val listener: ((Characters?) -> Unit)? = null) :
+@Singleton
+class UserListAdapter @Inject constructor (context: Context, val listener: ((Characters?) -> Unit)? = null) :
     PagingDataAdapter<Characters, RecyclerView.ViewHolder>(UserDiffCallBack()) {
 
     val localContext = context
